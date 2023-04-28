@@ -1,5 +1,5 @@
 import {
-  ScrollView,
+  FlatList,
   Text,
   TextInput,
   TouchableOpacity,
@@ -48,15 +48,27 @@ export function Home() {
           <Text style={styles.buttonText}>+</Text>
         </TouchableOpacity>
       </View>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40}}>
-        {participants.map((participant, index) => (
+      <FlatList 
+        data={participants}
+        keyExtractor={(item, index) => item + index.toString()}
+        contentContainerStyle={{ paddingBottom: 40 }}
+        renderItem={({ item }) => (
           <Participant
-            key={participant + index.toString()}
             handleParticipantRemove={handleParticipantRemove}
-            name={participant}
+            name={item}
           />
-        ))}
-      </ScrollView>
+          )}
+          showsVerticalScrollIndicator={false}
+          ListEmptyComponent={<TextEmptyList />}
+      />
     </View>
+  );
+}
+
+function TextEmptyList() {
+  return (
+    <Text style={styles.listEmptyText}>
+      Ninguém chegou no evento ainda? Adicione participantes a sua lista de presença.
+    </Text>
   );
 }
