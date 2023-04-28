@@ -1,4 +1,5 @@
 import {
+  Alert,
   FlatList,
   Text,
   TextInput,
@@ -23,12 +24,26 @@ export function Home() {
     "João",
   ];
 
-  function handleParticipantAdd() {
-    console.log("botão add");
+  function handleParticipantAdd(name: string) {
+    if (participants.includes(name)) {
+      return Alert.alert(
+        "Ops!",
+        "Já existe um participante na lista com esse nome."
+      );
+    }
   }
 
-  function handleParticipantRemove() {
-    console.log("botão remove");
+  function handleParticipantRemove(name: string) {
+    Alert.alert("Remover", `Remover o participante ${name}?`, [
+      {
+        text: "Sim",
+        onPress: () => Alert.alert("Deletado!"),
+      },
+      {
+        text: "Não",
+        style: "cancel",
+      },
+    ]);
   }
 
   return (
@@ -48,18 +63,18 @@ export function Home() {
           <Text style={styles.buttonText}>+</Text>
         </TouchableOpacity>
       </View>
-      <FlatList 
+      <FlatList
         data={participants}
         keyExtractor={(item, index) => item + index.toString()}
+        showsVerticalScrollIndicator={false}
+        ListEmptyComponent={<TextEmptyList />}
         contentContainerStyle={{ paddingBottom: 40 }}
         renderItem={({ item }) => (
           <Participant
-            handleParticipantRemove={handleParticipantRemove}
+            handleParticipantRemove={() => handleParticipantRemove(item)}
             name={item}
           />
-          )}
-          showsVerticalScrollIndicator={false}
-          ListEmptyComponent={<TextEmptyList />}
+        )}
       />
     </View>
   );
@@ -68,7 +83,8 @@ export function Home() {
 function TextEmptyList() {
   return (
     <Text style={styles.listEmptyText}>
-      Ninguém chegou no evento ainda? Adicione participantes a sua lista de presença.
+      Ninguém chegou no evento ainda? Adicione participantes a sua lista de
+      presença.
     </Text>
   );
 }
