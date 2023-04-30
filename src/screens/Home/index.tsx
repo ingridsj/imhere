@@ -24,7 +24,7 @@ export function Home() {
       );
     }
 
-    setParticipants(old => [ ...old, participantName ]);
+    setParticipants(prevState => [ ...prevState, participantName ]);
     setParticipantName('');
   }
 
@@ -32,7 +32,7 @@ export function Home() {
     Alert.alert("Remover", `Remover o participante ${name}?`, [
       {
         text: "Sim",
-        onPress: () => Alert.alert("Deletado!"),
+        onPress: () => setParticipants(prevState => prevState.filter(prev => prev !== name))
       },
       {
         text: "Não",
